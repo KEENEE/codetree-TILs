@@ -107,7 +107,8 @@ for years in range(m):
     idx = None
     for i in range(n):
         for j in range(n):
-            ing[i][j][1] -= 1   # 나무 성장 끝났으니까 여기서 제초제 남은연수 1년씩 줄여도 됨
+            if years > 0:
+                ing[i][j][1] = max(0, ing[i][j][1]-1)   # 나무 성장 끝났으니까 여기서 제초제 남은연수 1년씩 줄여도 됨
             killed = 0
             round_killed = find_kill(i, j, k, None, killed)
             if round_killed > max_killed:
