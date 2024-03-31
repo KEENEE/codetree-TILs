@@ -132,7 +132,7 @@ for r in range(k):
             swap_gun(i)
         # print(players[i], player_guns[i])
         
-    print(*scores)
+print(*scores)
     # for z in range(n):
     #     print(guns[z])
 
