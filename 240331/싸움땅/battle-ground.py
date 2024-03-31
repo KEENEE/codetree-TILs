@@ -1,3 +1,5 @@
+# input = open("input.txt").readline
+
 n, m ,k = map(int, input().split())
 
 nums = [list(map(int, input().split())) for _ in range(n)]
@@ -59,10 +61,12 @@ def fight(i, j):
     if (score_i < score_j) or (diff == 0 and players[i][3] < players[j][3]):
         winner, loser = j, i
 
-
+    # print("result", winner, loser)
+    
     # 진 플레이어는 총 내려놓고
     x,y,d,s = players[loser]
-    guns[x][y].append(player_guns[loser])
+    if player_guns[loser] != 0:
+        guns[x][y].append(player_guns[loser])
     player_guns[loser] = 0
 
     # 가던 방향으로 한칸 이동, 다른 플레이어가 있거나 범위 밖이면 이동 가능할때까지 90도씩 회전
@@ -74,7 +78,7 @@ def fight(i, j):
         if 0<=nx<n and 0<=ny<n:
             if locations.count([nx,ny]) == 0:
                 locations[loser] = [nx,ny]
-                players[loser] = [nx,ny,d,s]
+                players[loser] = [nx,ny,(d+o)%4,s]
                 break
             
     # 이동했을 때 총이 있다면 공격력이 높은 총 획득
@@ -85,6 +89,8 @@ def fight(i, j):
     # 이긴 플레이어는 점수 획득 및 총 swap
     scores[winner] += diff
     swap_gun(winner)
+    # print("winner", players[winner], player_guns[winner])
+    # print("loser", players[loser], player_guns[loser])
 
 
 
@@ -102,23 +108,33 @@ def swap_gun(l):
 
 
 for r in range(k):
+    # print()
     # print(r)
+    # for z in range(n):
+    #     print(guns[z])
+
     for i,p in enumerate(players):
         # 플레이어 이동
-        # print(players[i], locations[i])
+        # print(players[i], player_guns[i])
         move(i)
-        # print(players[i], locations[i])
         met = False
         for j,p in enumerate(players):
             if i == j:  # 자기자신은 패스
                 continue
             
             if locations[i] == locations[j]:
+                # print("fight", i, j)
                 met = True
                 fight(i,j)
 
         # 다른 플레이어를 만나지 않았다면 총 바꾸기
         if not met:
             swap_gun(i)
+        # print(players[i], player_guns[i])
+        
+    print(*scores)
+    # for z in range(n):
+    #     print(guns[z])
 
-print(*scores)
+# 오답노트
+# 1. 한 칸에 항목이 여러개가 들어갈 수 있는 맵이면 space map 대신 space map of list 형태로 만들기
