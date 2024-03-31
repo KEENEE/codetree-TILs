@@ -97,7 +97,7 @@ def swap_gun(l):
                 guns[x][y].append(player_guns[l])
             player_guns[l] = max(guns[x][y])
 
-        guns[x][y].remove(max(guns[x][y]))
+            guns[x][y].remove(max(guns[x][y]))
 
 
 
