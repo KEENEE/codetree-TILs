@@ -75,11 +75,14 @@ def move():
         cur[k] = [fx, fy]
         # print(cur, fx, fy)
         # 이동이 끝나면 다른 사람은 해당 편의점 칸을 지나갈 수 없게 됨. -1처리
-        if [fx, fy] == stores[k]:
-            space[fx][fy] = -1
-            # print(fx, fy)
-            cur[k] = -1
-            stores[k] = [-1,-1]
+    for e, p in enumerate(cur):
+        if p == -1:
+            continue
+        else:
+            if p == stores[e]:
+                space[p[0]][p[1]] = -1
+                stores[e] = [-1,-1]
+                cur[e] = -1
 
                     
 
