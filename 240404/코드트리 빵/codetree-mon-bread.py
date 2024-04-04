@@ -129,8 +129,8 @@ def basecamp(i):
 
 time = 0
 while True:
-    print()
-    print("-----",time,"-----")
+    # print()
+    # print("-----",time,"-----")
     
     if cur:
         move()
@@ -141,12 +141,12 @@ while True:
     if time < m:
         basecamp(time)
 
-    for z in range(n):
-        print(space[z])
-    print(cur)
-    print(stores)
+    # for z in range(n):
+    #     print(space[z])
+    # print(cur)
+    # print(stores)
     time += 1
 
-    breakpoint()
+    # breakpoint()
 
 print(time+1)
