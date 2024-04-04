@@ -17,6 +17,8 @@ def move():
     # 최단거리로 움직여야함. 도달하기까지 거쳐야하는 칸의 수가 최소가 되도록.
 
     for k, person in enumerate(cur):
+        if person == -1:
+            continue
         # print(k, cur[k], stores[k])
         px, py = person
 
@@ -76,6 +78,7 @@ def move():
         if [fx, fy] == stores[k]:
             space[fx][fy] = -1
             # print(fx, fy)
+            cur[k] = -1
             stores[k] = [-1,-1]
 
                     
