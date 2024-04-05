@@ -4,12 +4,13 @@ from collections import deque
 n, m, p, c, d = map(int, input().split())
 
 rdf = list(map(int, input().split()))
+rdf = [rdf[0]-1 , rdf[1]-1]
 rdf_direction = -1
 santas = [list(map(int, input().split())) for _ in range(p)]
-santas = [[x,y] for _,x,y in santas]
+santas = [[x-1,y-1] for _,x,y in santas]
 santas_directions = [-1]*p
 
-scores = [0] * m
+scores = [0] * p
 failed = [] # 탈락한 산타
 hit = [] # 기절한 산타
 hit_time = []   # 기절한 타이밍
@@ -20,6 +21,7 @@ dy = [0,1,0,-1,1,1,-1,-1]
 
 def move_rdf():
     global rdf
+    global rdf_direction
     # 가까운 산타를 향해 1칸 돌진
     # 게임에서 탈락하지 않은 산타 중 가장 가까운 산타를 선택
     x,y = rdf
@@ -37,11 +39,11 @@ def move_rdf():
                     min_idx = i
                     min_dist = distance
                 elif distance == min_dist:
-                    if sx > santas[min_idx-1][0]:
+                    if sx > santas[min_idx][0]:
                         min_idx = i
                         min_dist = distance
-                    elif sx == santas[min_idx-1][0]:
-                        if sy > santas[min_idx-1][1]:
+                    elif sx == santas[min_idx][0]:
+                        if sy > santas[min_idx][1]:
                             min_idx = i
                             min_dist = distance
 
@@ -59,9 +61,9 @@ def move_rdf():
                 rdf_direction = j
                 near_dist = distance
             elif near_dist > distance:
-                    rdf = [nx, ny]
-                    rdf_direction = j
-                    near_dist = distance
+                rdf = [nx, ny]
+                rdf_direction = j
+                near_dist = distance
 
 
 def move_santas(k):
@@ -103,14 +105,15 @@ def collision(which, idx):
         if [nx, ny] in santas:
             waitlist.append(santas.index([nx,ny]))
             
-        santas[k] = [nx, ny]
+        santas[idx] = [nx, ny]
         
         while waitlist:
             cur = waitlist[0]
+            cx, cy = santas[cur]
             del waitlist[0]
 
-            nx = x+dx[direction]
-            ny = y+dy[direction]
+            nx = cx+dx[direction]
+            ny = cy+dy[direction]
 
             if 0 <= nx < n and 0 <= ny < n:
                 if [nx, ny] in santas:
@@ -119,12 +122,12 @@ def collision(which, idx):
                 santas[cur] = [nx, ny]
             else:
                 santas[cur] = [-1,-1]
-                failed.append(k)
+                failed.append(cur)
                 break
         
     else:   # 만약 밀려난 위치가 게임판 밖이라면 산타는 게임에서 탈락됩니다.
-        failed.append(k)
-        santas[k] = [-1,-1]
+        failed.append(idx)
+        santas[idx] = [-1,-1]
 
 
 
@@ -139,7 +142,7 @@ for turn in range(m):
 
     # 루돌프 이동
     move_rdf()
-
+    # print(rdf_direction)
     # 루돌프가 움직여서 충졸이 일어난 경우
     if rdf in santas:
         idx = santas.index(rdf)
@@ -148,24 +151,34 @@ for turn in range(m):
         hit_time.append(turn)
         collision("santa", idx)
 
+    # print(rdf)
+    # print(santas)
+    # print(scores) 
     # 산타 이동
     for k in range(len(santas)):
         # 기절했거나 이미 게임에서 탈락한 산타는 움직일 수 없습니다.
         if k not in failed and k not in hit:
+            # print(santas[k])
             move_santas(k)
-
+            # print(santas[k])
+            
             # 산타가 움직여서 충돌이 발생한 경우
             if santas[k] == rdf:
                 scores[k] += d
                 hit.append(k)
                 hit_time.append(turn)
                 collision("rdf", k)
+    # print(rdf)
+    # print(santas)
+    # print(scores) 
 
     if len(failed) == len(santas):
         break
+
     # 매 턴 이후 아직 탈락하지 않은 산타들에게는 1점씩을 추가로 부여합니다.
     for l in range(len(santas)):
         if l not in failed:
             scores[l] += 1
-    
+    # print(scores)   
+    # breakpoint() 
 print(*scores)
