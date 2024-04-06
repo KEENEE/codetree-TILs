@@ -157,9 +157,9 @@ for turn in range(m):
     for k in range(len(santas)):
         # 기절했거나 이미 게임에서 탈락한 산타는 움직일 수 없습니다.
         if k not in failed and k not in hit:
-            print(santas[k])
+            # print(santas[k])
             move_santas(k)
-            print(santas[k])
+            # print(santas[k])
             
             # 산타가 움직여서 충돌이 발생한 경우
             if santas[k] == rdf:
