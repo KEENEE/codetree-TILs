@@ -118,7 +118,7 @@ def collision(which, idx):
 
             if 0 <= nx < n and 0 <= ny < n:
                 if [nx, ny] in santas:
-                    waitlist.append[santas.index(cur)]
+                    waitlist.append(santas.index([nx,ny]))
             
                 santas[cur] = [nx, ny]
             else:
