@@ -36,18 +36,20 @@ for c in reversed(catcher_dir):
 
 catcher_directions = catcher_dir * (100//((n**2-1)*2) + 1)  # directions 이어붙이기
 
+
 def move_runners():
     # 좌우로만 움직이는 유형은 오른쪽, 상하로만 움직이는 유형은 아래쪽 보고 시작
     # 현재 술래와의 거리가 3 이하인 도망자만 움직입니다. 
     # 두 사람간의 거리는 |x1 - x2| + |y1 - y2|로 정의됩니다.
-
+    global catcher
     cx, cy = catcher
     for i, runner in enumerate(runners):
         rx, ry = runner
         d = runners_directions[i]
         # print(rx, ry, d)
         distance = abs(rx-cx) + abs(ry-cy)
-
+        # print(cx, cy)
+        # print(rx, ry, d, distance)
         if distance <= 3:
             nx = rx + dx[d]
             ny = ry + dy[d]
@@ -88,15 +90,19 @@ def move_catcher():
     # 방향을 바로 틀어줘야함
     d = catcher_directions[catcher_count+1]
 
-    # 옮긴 위치에 있는 도망자 잡기 - 처리해줄필요 없나?
+    while ([nx, ny] in runners and [nx, ny] not in trees):
+        catch += 1
+        idx = runners.index([nx, ny])
+        del runners[idx]
+        del runners_directions[idx]
+
     for _ in range(2):
         tx = nx + dx[d]
         ty = ny + dy[d]
        
         if 0<=tx<n and 0<=ty<n:
-            if [tx, ty] in runners and [tx,ty] not in trees:
+            while ([tx, ty] in runners and [tx,ty] not in trees):
                 catch += 1
-                # print(tx, ty)
                 idx = runners.index([tx, ty])
                 del runners[idx]
                 del runners_directions[idx]
@@ -110,16 +116,22 @@ def move_catcher():
     return catch
 
 
-# print(catcher)
-# print(runners)
+print(catcher)
+print(runners)
 
 for turn in range(k):
+    print("-----", turn, "-----")
     move_runners()
     # print("runner moved", runners)
+    # print("directions", runners_directions)
     catch = move_catcher()
     # print("catcher moved", catcher)
+    # print("trees", trees)
     # print("catcher catched", runners)
+    # print("directions", runners_directions)
     
+    # if catch > 0:
+    #     print(turn, catch)
     score += (turn + 1) * catch
     # print(score)
     # breakpoint()
@@ -127,3 +139,7 @@ for turn in range(k):
 
 # k번의 턴 동안 얻게되는 총 점수 출력
 print(score)
+
+
+# 오답노트
+# 한 위치에 여러명 있을수 있으면 다 잡아야함!!!!!!!!!!
