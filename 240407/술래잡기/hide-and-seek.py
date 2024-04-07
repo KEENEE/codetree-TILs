@@ -116,11 +116,11 @@ def move_catcher():
     return catch
 
 
-print(catcher)
-print(runners)
+# print(catcher)
+# print(runners)
 
 for turn in range(k):
-    print("-----", turn, "-----")
+    # print("-----", turn, "-----")
     move_runners()
     # print("runner moved", runners)
     # print("directions", runners_directions)
