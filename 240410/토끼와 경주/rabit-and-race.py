@@ -10,7 +10,7 @@ pids = [-1] * 2000
 distances = [-1] * 2000
 jumps = [0] * 2000
 locations = [[0,0]] * 2000
-id_to_idx = [-1] * 2000
+id_to_idx = [-1] * 10000000
 scores = [0] * 2000
 
 dx = [-1,0,1,0]
