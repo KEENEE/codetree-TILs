@@ -21,22 +21,8 @@ for i in range(n):
         elif space[i][j] == 3:
             tails.append([i,j])
 
-# print(heads)
-# print(tails)
 def move():        
     #머리를 2로 바꾸고 한칸 앞을 1로, 
-    for i, head in enumerate(heads):
-        hx, hy = head
-        space[hx][hy] = 2
-        for d in range(4):
-            nx = hx + dx[d]
-            ny = hy + dy[d]
-        
-            if 0<=nx<n and 0<=ny<n:
-                if space[nx][ny] == 4:
-                    space[nx][ny] = 1
-                    heads[i] = [nx, ny]
-
     # 꼬리를 4로 바꾸고 한칸 앞을 3으로
     for j, tail in enumerate(tails):
         tx, ty = tail
@@ -49,6 +35,19 @@ def move():
                 if space[nx][ny] == 2:
                     space[nx][ny] = 3
                     tails[j] = [nx, ny]
+
+    for i, head in enumerate(heads):
+        hx, hy = head
+        space[hx][hy] = 2
+        # found = False
+        for d in range(4):
+            nx = hx + dx[d]
+            ny = hy + dy[d]
+        
+            if 0<=nx<n and 0<=ny<n:
+                if space[nx][ny] == 4:
+                    space[nx][ny] = 1
+                    heads[i] = [nx, ny]
     
 
 def throw(d):
