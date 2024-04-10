@@ -116,7 +116,7 @@ for turn in range(1,t+1):
             indexes.append(k) 
 
     for index in reversed(indexes):
-        monsters.remove[index]
+        del monsters[index]
     # print("after dead", monsters)
     # 복제 완성
     monsters = monsters + copied
