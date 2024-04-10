@@ -47,45 +47,45 @@ def dfs(x, y, count, route, ate):
     global max_ate, max_route
 
     if count == 3:
-        route.append([x,y])
         if ate > max_ate:
-            max_route = route
+            max_route = copy.deepcopy(route)
+            max_ate = ate
         return
 
     for k in range(4):
         nx = x + dxp[k]
         ny = y + dyp[k]
 
-        if 0<=nx<4 and 0<=ny<4:
+        if 1<=nx<5 and 1<=ny<5:
             route.append([nx,ny])
             total = 0
             for m in monsters:
                 if m[0] == nx and m[1] == ny and m[2] >= 0:
                     ate += 1
                     total += 1
-
+            # print(route)
             dfs(nx, ny, count+1, route, ate)
 
             if total:
                 ate -= total
             route.remove([nx, ny])
+
     
 
 def packman_move():
     global max_ate, max_route
     max_ate = 0
-    max_route = []
-
+    
     x, y = packman
     count = 0
     route = []
     ate = 0
 
     dfs(x, y, count, route, ate)
-
+    # print(max_route)
     idxs = []
     for i, (x,y,d) in enumerate(monsters):
-        if [x,y] in route:
+        if [x,y] in max_route:
             idxs.append(i)
 
     return idxs
@@ -101,7 +101,7 @@ for turn in range(1,t+1):
     monster_move()
     # print("after move", monsters)
     idxs = packman_move()
-    # print(max_route)
+    # print("max_route", max_route)
     # print("dead monsters", idxs)
     
     # 시체 정보 저장
