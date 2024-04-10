@@ -7,7 +7,7 @@ n, m, k = map(int, input().split())
 dx = [0,-1,0,1]
 dy = [1,0,-1,0]
 
-start = [0,0]
+start = [-1,0]
 
 space = [list(map(int, input().split())) for _ in range(n)]
 heads = []
@@ -53,6 +53,7 @@ def move():
 
 def throw(d):
     sx, sy = start
+    # print(sx, sy, d)
     
     for i in range(n):
         nx = sx + dx[d]*i
@@ -75,29 +76,31 @@ def scoring(hit):
     if hit in heads:
         hx, hy = hit
         final = count
-    else:
-        q = deque()
-        q.append([hit[0], hit[1], count])
-
-        while q:
-            x, y, count = q.popleft()
-            
-            for i in range(4):
-                nx = x + dx[i] 
-                ny = y + dy[i]
-                
-                if 0<=nx<n and 0<=ny<n:
-                    if space[nx][ny] == 1:    # 머리인 경우
-                        final = count + 1
-                        hx, hy = nx, ny
-                    elif space[nx][ny] == 2:    # 몸통인 경우 큐에 넣고 계속 진행
-                        q.append([nx, ny, count+1])
-                    elif space[nx][ny] == 3:    # 꼬리인 경우 큐에 넣지 않고 tail 좌표 기록만 해놓음
-                        tx, ty = nx, ny
-            
-            if tx != -1 and hx != -1:
-                break
+    elif hit in tails:
+        tx, ty = hit
     
+    q = deque()
+    q.append([hit[0], hit[1], count])
+
+    while q:
+        x, y, count = q.popleft()
+        
+        for i in range(4):
+            nx = x + dx[i] 
+            ny = y + dy[i]
+            
+            if 0<=nx<n and 0<=ny<n:
+                if space[nx][ny] == 1:    # 머리인 경우
+                    final = count + 1
+                    hx, hy = nx, ny
+                elif space[nx][ny] == 2:    # 몸통인 경우 큐에 넣고 계속 진행
+                    q.append([nx, ny, count+1])
+                elif space[nx][ny] == 3:    # 꼬리인 경우 큐에 넣지 않고 tail 좌표 기록만 해놓음
+                    tx, ty = nx, ny
+        
+        if tx != -1 and hx != -1:
+            break
+
     score += (final**2)
 
     # head 와 tail 방향 바꾸기
@@ -115,16 +118,11 @@ def scoring(hit):
 
 for turn in range(k):
     move()
-    # for i in range(n):
-    #     print(space[i])
-    # print()
+    for i in range(n):
+        print(space[i])
+    print()
 
     d = (turn // n) % 4
-    hit = throw(d)
-
-    if hit:
-        scoring(hit)
-
     if d == 0:
         start[0] += 1
     elif d == 1:
@@ -133,6 +131,13 @@ for turn in range(k):
         start[2] -= 1
     else:
         start[3] -= 1
+        
+    hit = throw(d)
+
+    if hit:
+        scoring(hit)
+
+
 
 print(score)
 
