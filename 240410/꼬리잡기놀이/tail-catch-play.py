@@ -80,11 +80,11 @@ def scoring(hit):
         q.append([hit[0], hit[1], count])
 
         while q:
-            hx, hy, count = q.popleft()
+            x, y, count = q.popleft()
             
             for i in range(4):
-                nx = hx + dx[i] 
-                ny = hy + dy[i]
+                nx = x + dx[i] 
+                ny = y + dy[i]
                 
                 if 0<=nx<n and 0<=ny<n:
                     if space[nx][ny] == 1:    # 머리인 경우
@@ -117,6 +117,7 @@ for turn in range(k):
     move()
     # for i in range(n):
     #     print(space[i])
+    # print()
 
     d = (turn // n) % 4
     hit = throw(d)
