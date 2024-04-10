@@ -118,9 +118,9 @@ def scoring(hit):
 
 for turn in range(k):
     move()
-    for i in range(n):
-        print(space[i])
-    print()
+    # for i in range(n):
+    #     print(space[i])
+    # print()
 
     d = (turn // n) % 4
     if d == 0:
