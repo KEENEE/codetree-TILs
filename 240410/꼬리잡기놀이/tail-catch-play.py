@@ -1,13 +1,13 @@
 from collections import deque
 
-# input = open("input.txt").readline
+input = open("input.txt").readline
 
 n, m, k = map(int, input().split())
 
 dx = [0,-1,0,1]
 dy = [1,0,-1,0]
 
-start = [-1,0]
+start = [0,0]
 
 space = [list(map(int, input().split())) for _ in range(n)]
 heads = []
@@ -67,6 +67,7 @@ def throw(d):
 
 def scoring(hit):
     global score
+    visited = [[False] * n for _ in range(n)]
     count = 1
     final = 0
     tx, ty = -1, -1
@@ -81,6 +82,7 @@ def scoring(hit):
     
     q = deque()
     q.append([hit[0], hit[1], count])
+    visited[hit[0]][hit[1]] = True
 
     while q:
         x, y, count = q.popleft()
@@ -90,13 +92,15 @@ def scoring(hit):
             ny = y + dy[i]
             
             if 0<=nx<n and 0<=ny<n:
-                if space[nx][ny] == 1:    # 머리인 경우
-                    final = count + 1
-                    hx, hy = nx, ny
-                elif space[nx][ny] == 2:    # 몸통인 경우 큐에 넣고 계속 진행
-                    q.append([nx, ny, count+1])
-                elif space[nx][ny] == 3:    # 꼬리인 경우 큐에 넣지 않고 tail 좌표 기록만 해놓음
-                    tx, ty = nx, ny
+                if visited[nx][ny] == False:
+                    if space[nx][ny] == 1:    # 머리인 경우
+                        final = count + 1
+                        hx, hy = nx, ny
+                    elif space[nx][ny] == 2:    # 몸통인 경우 큐에 넣고 계속 진행
+                        visited[nx][ny] = True
+                        q.append([nx, ny, count+1])
+                    elif space[nx][ny] == 3:    # 꼬리인 경우 큐에 넣지 않고 tail 좌표 기록만 해놓음
+                        tx, ty = nx, ny
         
         if tx != -1 and hx != -1:
             break
@@ -120,23 +124,27 @@ for turn in range(k):
     move()
     # for i in range(n):
     #     print(space[i])
-    # print()
 
     d = (turn // n) % 4
-    if d == 0:
-        start[0] += 1
-    elif d == 1:
-        start[1] += 1
-    elif d == 2:
-        start[2] -= 1
-    else:
-        start[3] -= 1
+    if turn % n != 0:
+        if d == 0:
+            start[0] += 1
+        elif d == 1:
+            start[1] += 1
+        elif d == 2:
+            start[2] -= 1
+        else:
+            start[3] -= 1
         
     hit = throw(d)
 
     if hit:
         scoring(hit)
-
+    # for i in range(n):
+    #     print(space[i])
+    # print(score)
+    # print()
+    
 
 
 print(score)
