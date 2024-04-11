@@ -30,35 +30,72 @@ def request(info):
 
 
 def try_scoring(info):
-    global heap_queue
+    if None not in scoring_machines:
+        return
+
     t = info[0]
     temp = []
     started = False
+    # for i in range(len(heap_queue)):
+    #     p_heap, t_heap, u_heap = heapq.heappop(heap_queue)
+
+    #     domain = u_heap.split("/")[0]
+
+    #     # 도메인이 채점중이면 못들어감
+    #     if domain in domains:
+    #         temp.append([p_heap, t_heap, u_heap])
+    #         heapq.heapify(heap_queue)
+    #         continue
+
+    #     # 채점중은 아닌데 최근에 채점했으면 못들어감
+    #     elif domain in start_history and domain in end_history:
+    #         gap = end_history[domain] - start_history[domain]
+
+    #         if int(t) < (start_history[domain] + 3 * gap):
+    #             temp.append([p_heap, t_heap, u_heap])
+    #             continue
+        
+    #     # 채점 시작
+    #     for j, s in enumerate(scoring_machines):
+    #         if s == None:
+    #             scoring_machines[j] = u_heap
+    #             queue.remove(u_heap)
+    #             domains.append(domain)
+    #             start_history[domain] = int(t)
+    #             if domain in end_history:
+    #                 del(end_history[domain])
+    #             started = True
+    #             break
+                
+    #     if started:
+    #         break
+
+    # for t in temp:
+    #     heapq.heappush(heap_queue, t)
+
     for i in range(len(heap_queue)):
-        p_heap, t_heap, u_heap = heapq.heappop(heap_queue)
+        p_heap, t_heap, u_heap = heap_queue[i]
 
         domain = u_heap.split("/")[0]
 
         # 도메인이 채점중이면 못들어감
         if domain in domains:
-
-            temp.append([p_heap, t_heap, u_heap])
-            heapq.heapify(heap_queue)
             continue
 
         # 채점중은 아닌데 최근에 채점했으면 못들어감
         elif domain in start_history and domain in end_history:
             gap = end_history[domain] - start_history[domain]
-
             if int(t) < (start_history[domain] + 3 * gap):
-                temp.append([p_heap, t_heap, u_heap])
                 continue
         
         # 채점 시작
         for j, s in enumerate(scoring_machines):
             if s == None:
-                scoring_machines[j] = u_heap
+                # print(heap_queue)
+                # print(queue, u_heap)
+                del heap_queue[i]
                 queue.remove(u_heap)
+                scoring_machines[j] = u_heap
                 domains.append(domain)
                 start_history[domain] = int(t)
                 if domain in end_history:
@@ -66,13 +103,8 @@ def try_scoring(info):
                 started = True
                 break
                 
-
         if started:
             break
-
-    for t in temp:
-        heapq.heappush(heap_queue, t)
-
 
 
 def terminate(info):
@@ -90,29 +122,33 @@ def terminate(info):
 
 for i in range(q):
     ins, *info = input().split()
-
+    # print(i)
     if ins == '100':
-        # print(i, ins, info)
+        # print(ins, info)
         prepare(info)
-        # print("queue", heap_queue)
+        # print("heap_queue", heap_queue)
+        # print("queue", queue)
         # print("machine", scoring_machines)
     elif ins == '200':  # 요청
-        # print(i, ins, info)
+        # print(ins, info)
         request(info)
-        # print("queue", heap_queue)
+        # print("heap_queue", heap_queue)
+        # print("queue", queue)
         # print("machine", scoring_machines)
     elif ins == '300':  # 채점시도
-        # print(i, ins, info)
+        # print(ins, info)
         try_scoring(info)
-        # print("queue", heap_queue)
+        # print("heap_queue", heap_queue)
+        # print("queue", queue)
         # print("machine", scoring_machines)
     elif ins == '400':  # 채점종료
-        # print(i, ins, info)
+        # print(ins, info)
         terminate(info)
-        # print("queue", heap_queue)
+        # print("heap_queue", heap_queue)
+        # print("queue", queue)
         # print("machine", scoring_machines)
     else:               # 프린트
-        # print(i, ins)
+        # print(ins)
         print(len(heap_queue))
         # 시간 t에 채점 대기 큐에 있는 채점 태스크의 수 출력
     # print()
