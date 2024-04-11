@@ -73,7 +73,7 @@ def dfs(x, y, count, route, ate, visited):
                         visited[i] = True
                         visit.append(i)
             
-            dfs(nx, ny, count+1, route, ate+total, visited)
+            dfs(nx, ny, count+1, route, ate+len(visit), visited)
             
             for v in visit:
                 visited[v] = False
