@@ -25,7 +25,7 @@ def request(info):
 
     # 채점 task는 채점 대기 큐에 들어가게 됩니다. 채점 대기 큐에 이미 u가 있으면 큐에 추가하지 않고 넘어감
     if u not in queue:
-        heapq.heappush(heap_queue, [p, t, u])
+        heapq.heappush(heap_queue, [int(p), int(t), u])
         queue.append(u)
 
 
