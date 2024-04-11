@@ -5,7 +5,7 @@ q = int(input())
 scoring_machines = []
 heap_queue = []
 queue = []
-domains = []
+domains = {}
 start_history = {}
 end_history = {}
 def prepare(info):
@@ -91,7 +91,7 @@ def terminate(info):
         end_history[domain] = int(t)
         scoring_machines[jid-1] = None
 
-        
+
 for i in range(q):
     ins, *info = input().split()
     # print(i)
