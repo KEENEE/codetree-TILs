@@ -72,7 +72,7 @@ def try_scoring(info):
 
     # for t in temp:
     #     heapq.heappush(heap_queue, t)
-
+    heap_queue.sort()
     for i in range(len(heap_queue)):
         p_heap, t_heap, u_heap = heap_queue[i]
 
