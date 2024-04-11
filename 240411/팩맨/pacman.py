@@ -65,17 +65,19 @@ def dfs(x, y, count, route, ate, visited):
         ny = y + dyp[k]
 
         if 0<=nx<4 and 0<=ny<4:
-            if visited[nx][ny] == False:
-                visited[nx][ny] = True
-                route.append([nx,ny])
-                total = 0
-                for m in monsters:
-                    if m[0] == nx and m[1] == ny and m[2] >= 0:
-                        total += 1
-                
-                dfs(nx, ny, count+1, route, ate+total, visited)
-                visited[nx][ny] = False
-                route.remove([nx, ny])
+            route.append([nx,ny])
+            visit = []
+            for i, m in enumerate(monsters):
+                if m[0] == nx and m[1] == ny and m[2] >= 0:
+                    if not visited[i]:
+                        visited[i] = True
+                        visit.append(i)
+            
+            dfs(nx, ny, count+1, route, ate+total, visited)
+            
+            for v in visit:
+                visited[v] = False
+            route.remove([nx, ny])
 
     
 
@@ -87,7 +89,7 @@ def packman_move():
     count = 0
     route = []
     ate = 0
-    visited = [[False]*4 for _ in range(4)]
+    visited = [False] * len(monsters)
 
     dfs(x, y, count, route, ate, visited)
     packman = max_route[-1]
