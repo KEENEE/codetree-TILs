@@ -39,7 +39,6 @@ def try_scoring(info):
     temp = []
     started = False
 
-    cur = time.time()
     heap_queue.sort()
 
     for i in range(len(heap_queue)):
@@ -73,7 +72,6 @@ def try_scoring(info):
                 started = True
                 break
 
-        cur = time.time()
 
         if started:
             break
