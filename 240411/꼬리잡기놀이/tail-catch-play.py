@@ -56,7 +56,7 @@ def move():
 
 def throw(d):
     sx, sy = start
-    print(sx, sy, d)
+    # print(sx, sy, d)
     
     for i in range(n):
         nx = sx + dx[d]*i
