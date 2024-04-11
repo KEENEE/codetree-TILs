@@ -56,7 +56,7 @@ def move():
 
 def throw(d):
     sx, sy = start
-    # print(sx, sy, d)
+    print(sx, sy, d)
     
     for i in range(n):
         nx = sx + dx[d]*i
@@ -98,30 +98,37 @@ def scoring(hit):
                         visited[nx][ny] = True
                         q.append([nx, ny])
 
-
     # 머리에서 꼬리찾기 + count 세기
     count = 1
     final = 0
     q = deque()
-    q.append([hx,hy, count])
+    q.append([hx, hy, count])
+    visited = [[False] * n for _ in range(n)]
+    visited[hx][hy] = True
 
-    while tx == -1:
+    while True:
         x, y, count = q.popleft()
+        # print(x,y,count)
         if [x,y] == hit:
             final = count
-        
+            # print(final)
+
+        if tx != -1:
+            break
+
         for i in range(4):
             nx = x+dx[i]
             ny = y+dy[i]
 
             if 0<=nx<n and 0<=ny<n:
-                if space[nx][ny] == 2:
-                    q.append([nx, ny, count+1])
-                if space[nx][ny] == 3:
-                    tx, ty = nx, ny
-                    final = count + 1
-                    break
-
+                if visited[nx][ny] == False:
+                    if space[nx][ny] == 2:
+                        q.append([nx, ny, count+1])
+                        visited[nx][ny] = True
+                    if space[nx][ny] == 3:
+                        tx, ty = nx, ny
+                        q.append([nx, ny, count+1])
+    # print(tx, ty, final)
     score += (final**2)
 
     # head 와 tail 방향 바꾸기
@@ -141,6 +148,7 @@ for turn in range(k):
     move()
     # for i in range(n):
     #     print(space[i])
+    # print()
 
     d = (turn // n) % 4
     if turn % n != 0:
