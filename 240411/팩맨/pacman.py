@@ -77,8 +77,7 @@ def dfs(x, y, count, route, ate, visited):
             
             for v in visit:
                 visited[v] = False
-            route.remove([nx, ny])
-
+            del route[-1]
     
 
 def packman_move():
