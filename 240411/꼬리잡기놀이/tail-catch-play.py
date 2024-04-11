@@ -1,6 +1,6 @@
 from collections import deque
 
-input = open("input.txt").readline
+# input = open("input.txt").readline
 
 n, m, k = map(int, input().split())
 
