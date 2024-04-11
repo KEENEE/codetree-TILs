@@ -8,11 +8,10 @@ queue = []
 domains = []
 start_history = {}
 end_history = {}
-
 def prepare(info):
     global scoring_machines
     n, u0 = info
-
+    domains[u0.split("/")[0]] = False
     scoring_machines = [None] * int(n)
 
     heapq.heappush(heap_queue, [1, 0, u0])
@@ -22,11 +21,14 @@ def prepare(info):
 def request(info):
     # t초에 채점 우선순위가 p이면서 url이 u인 문제에 대한 채점 요청이 들어오게 됩니다. 
     t, p, u = info
-
+    domain = u.split("/")[0]
     # 채점 task는 채점 대기 큐에 들어가게 됩니다. 채점 대기 큐에 이미 u가 있으면 큐에 추가하지 않고 넘어감
     if u not in queue:
         heapq.heappush(heap_queue, [int(p), int(t), u])
         queue.append(u)
+        if domain not in domains:
+            domains[domain] = False
+        
 
 
 def try_scoring(info):
@@ -36,73 +38,43 @@ def try_scoring(info):
     t = info[0]
     temp = []
     started = False
-    # for i in range(len(heap_queue)):
-    #     p_heap, t_heap, u_heap = heapq.heappop(heap_queue)
 
-    #     domain = u_heap.split("/")[0]
-
-    #     # 도메인이 채점중이면 못들어감
-    #     if domain in domains:
-    #         temp.append([p_heap, t_heap, u_heap])
-    #         heapq.heapify(heap_queue)
-    #         continue
-
-    #     # 채점중은 아닌데 최근에 채점했으면 못들어감
-    #     elif domain in start_history and domain in end_history:
-    #         gap = end_history[domain] - start_history[domain]
-
-    #         if int(t) < (start_history[domain] + 3 * gap):
-    #             temp.append([p_heap, t_heap, u_heap])
-    #             continue
-        
-    #     # 채점 시작
-    #     for j, s in enumerate(scoring_machines):
-    #         if s == None:
-    #             scoring_machines[j] = u_heap
-    #             queue.remove(u_heap)
-    #             domains.append(domain)
-    #             start_history[domain] = int(t)
-    #             if domain in end_history:
-    #                 del(end_history[domain])
-    #             started = True
-    #             break
-                
-    #     if started:
-    #         break
-
-    # for t in temp:
-    #     heapq.heappush(heap_queue, t)
+    cur = time.time()
     heap_queue.sort()
+
     for i in range(len(heap_queue)):
         p_heap, t_heap, u_heap = heap_queue[i]
 
         domain = u_heap.split("/")[0]
 
         # 도메인이 채점중이면 못들어감
-        if domain in domains:
+        if domains[domain]:
+            # print(1)
             continue
-
+        
         # 채점중은 아닌데 최근에 채점했으면 못들어감
         elif domain in start_history and domain in end_history:
+            # print(2)
             gap = end_history[domain] - start_history[domain]
             if int(t) < (start_history[domain] + 3 * gap):
                 continue
         
+
         # 채점 시작
         for j, s in enumerate(scoring_machines):
             if s == None:
-                # print(heap_queue)
-                # print(queue, u_heap)
                 del heap_queue[i]
                 queue.remove(u_heap)
                 scoring_machines[j] = u_heap
-                domains.append(domain)
+                domains[domain] = True
                 start_history[domain] = int(t)
                 if domain in end_history:
                     del(end_history[domain])
                 started = True
                 break
-                
+
+        cur = time.time()
+
         if started:
             break
 
@@ -115,11 +87,11 @@ def terminate(info):
     if scoring_machines[jid-1] != None:
         url = scoring_machines[jid-1]
         domain = url.split("/")[0]
-        domains.remove(domain)
+        domains[domain] = False
         end_history[domain] = int(t)
         scoring_machines[jid-1] = None
 
-
+        
 for i in range(q):
     ins, *info = input().split()
     # print(i)
