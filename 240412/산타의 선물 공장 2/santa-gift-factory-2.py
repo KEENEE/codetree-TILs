@@ -71,7 +71,10 @@ def move(info):
         belts_starts[dst] = src_first
 
         nexts[src_end] = dst_first
-        prevs[dst_first] = src_end
+        if dst_first != None:
+            prevs[dst_first] = src_end
+        else:
+            belts_ends[dst] = src_end
 
 
     len_belts[dst] += len_belts[src]
