@@ -164,7 +164,7 @@ def divide(info):   # 최대 100번
         # num-1 번째 좌표 알아내기
         cur = src_first
         for i in range(num-1):
-            new = next[cur]
+            new = nexts[cur]
             cur = new
         
         src_end = cur
