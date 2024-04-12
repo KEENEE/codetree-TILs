@@ -165,7 +165,9 @@ def divide(info):   # 최대 100번
     
     src_end = cur
     
-    belts_starts[src] = nexts[src_first]
+    src_end_next = nexts[src_end]
+    belts_starts[src] = src_end_next
+    prevs[src_end_next] = -1
     # next가 무조건 있으므로 1개짜리 벨트의 end 핸들링 안해줘도 됨
     
     dst_first = belts_starts[dst]
