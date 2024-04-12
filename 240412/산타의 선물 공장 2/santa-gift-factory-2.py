@@ -8,13 +8,13 @@ n = -1
 m = -1
 
 # 0-99999:벨트, 100000-199999:선물
-prevs = [None] * 6
-nexts = [None] * 6
+prevs = [None] * 100000
+nexts = [None] * 100000
 
 
-len_belts = [0] * 4
-belts_starts = [None] * 6
-belts_ends = [None] * 6    
+len_belts = [0] * 100000
+belts_starts = [None] * 100000
+belts_ends = [None] * 100000   
 
 def printbelt():
     print("prevs", prevs)
