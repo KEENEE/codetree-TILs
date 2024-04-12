@@ -1,6 +1,6 @@
 from collections import deque
 import time
-input = open("input.txt").readline
+# input = open("input.txt").readline
 q = int(input())
 
 belts = []
