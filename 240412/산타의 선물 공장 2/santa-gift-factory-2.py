@@ -97,9 +97,13 @@ def change(info):
         # dst 벨트에 선물이 없는경우
         if len_belts[dst] == 0:
             src_first = belts_starts[src]
-            belts_starts[src] = nexts[src_first]    # 만약 next가 None이었으면 그대로 start도 None이 됨
+            src_first_next = nexts[src_first]
+            nexts[src_first] = None
+            belts_starts[src] = src_first_next    # 만약 next가 None이었으면 그대로 start도 None이 됨
             if len_belts[src] == 1:
                 belts_ends[src] = None
+            else:
+                prevs[src_first_next] = -1
             belts_starts[dst] = src_first
             belts_ends[dst] = src_first
             len_belts[src] -= 1
@@ -126,10 +130,12 @@ def change(info):
             dst_first = belts_starts[dst]
             dst_first_next = nexts[dst_first]
             nexts[dst_first] = None
-            prevs[dst_first_next] = -1
+            
             belts_starts[dst] = dst_first_next    # 만약 next가 None이었으면 그대로 start도 None이 됨
             if len_belts[dst] == 1:
                 belts_ends[dst] = None
+            else:
+                prevs[dst_first_next] = -1
             belts_starts[src] = dst_first
             belts_ends[src] = dst_first
             len_belts[src] += 1
