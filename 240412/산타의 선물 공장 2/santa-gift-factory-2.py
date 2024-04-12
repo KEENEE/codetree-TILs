@@ -155,34 +155,35 @@ def divide(info):   # 최대 100번
     n_src = len_belts[src]
     num = n_src // 2
 
-    src_first = belts_starts[src]
+    if n_src > 1:
+        src_first = belts_starts[src]
 
-    # num-1 번째 좌표 알아내기
-    cur = src_first
-    for i in range(num-1):
-        new = next[cur]
-        cur = new
-    
-    src_end = cur
-    
-    src_end_next = nexts[src_end]
-    belts_starts[src] = src_end_next
-    prevs[src_end_next] = -1
-    # next가 무조건 있으므로 1개짜리 벨트의 end 핸들링 안해줘도 됨
-    
-    dst_first = belts_starts[dst]
-    belts_starts[dst] = src_first
-    nexts[src_end] = dst_first
+        # num-1 번째 좌표 알아내기
+        cur = src_first
+        for i in range(num-1):
+            new = next[cur]
+            cur = new
+        
+        src_end = cur
+        
+        src_end_next = nexts[src_end]
+        belts_starts[src] = src_end_next
+        prevs[src_end_next] = -1
+        # next가 무조건 있으므로 1개짜리 벨트의 end 핸들링 안해줘도 됨
+        
+        dst_first = belts_starts[dst]
+        belts_starts[dst] = src_first
+        nexts[src_end] = dst_first
 
-    if dst_first != None:
-        prevs[dst_first] = src_end
+        if dst_first != None:
+            prevs[dst_first] = src_end
 
-    if len_belts[dst] == 0:
-        belts_ends[dst] = src_end
-    
+        if len_belts[dst] == 0:
+            belts_ends[dst] = src_end
+        
 
-    len_belts[src] -= num
-    len_belts[dst] += num
+        len_belts[src] -= num
+        len_belts[dst] += num
 
     print(len_belts[dst])
 
