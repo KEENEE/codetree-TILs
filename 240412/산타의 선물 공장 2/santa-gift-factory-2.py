@@ -1,6 +1,6 @@
 from collections import deque
 import time
-# input = open("input.txt").readline
+input = open("input.txt").readline
 q = int(input())
 
 belts = []
@@ -14,7 +14,7 @@ nexts = [None] * 100000
 
 len_belts = [0] * 100000
 belts_starts = [None] * 100000
-belts_ends = [None] * 100000   
+belts_ends = [None] * 100000  
 
 def printbelt():
     print("prevs", prevs)
@@ -41,7 +41,7 @@ def build(info):    # 100, n, m, b_1 b_2, ... , b_m
             prevs[pid] = belts_ends[bid]
             nexts[belts_ends[bid]] = pid
         else:
-            prevs[i] = -1    # 첫번째 노드는 prev가 -1
+            prevs[i] = None    # 첫번째 노드는 prev가 -1
             belts_starts[bid] = pid
 
         len_belts[bid] += 1
@@ -71,7 +71,7 @@ def move(info):
         belts_starts[dst] = src_first
 
         nexts[src_end] = dst_first
-        if dst_first != None:
+        if len_belts[dst] != 0:
             prevs[dst_first] = src_end
         else:
             belts_ends[dst] = src_end
@@ -106,7 +106,7 @@ def change(info):
             if len_belts[src] == 1:
                 belts_ends[src] = None
             else:
-                prevs[src_first_next] = -1
+                prevs[src_first_next] = None
             belts_starts[dst] = src_first
             belts_ends[dst] = src_first
             len_belts[src] -= 1
@@ -138,7 +138,7 @@ def change(info):
             if len_belts[dst] == 1:
                 belts_ends[dst] = None
             else:
-                prevs[dst_first_next] = -1
+                prevs[dst_first_next] = None
             belts_starts[src] = dst_first
             belts_ends[src] = dst_first
             len_belts[src] += 1
@@ -171,7 +171,7 @@ def divide(info):   # 최대 100번
         
         src_end_next = nexts[src_end]
         belts_starts[src] = src_end_next
-        prevs[src_end_next] = -1
+        prevs[src_end_next] = None
         # next가 무조건 있으므로 1개짜리 벨트의 end 핸들링 안해줘도 됨
         
         dst_first = belts_starts[dst]
@@ -184,7 +184,6 @@ def divide(info):   # 최대 100번
         if len_belts[dst] == 0:
             belts_ends[dst] = src_end
         
-
         len_belts[src] -= num
         len_belts[dst] += num
 
@@ -199,7 +198,7 @@ def get_present(info):
     
     pidx = info[0] - 1
 
-    if prevs[pidx] >= 0:
+    if prevs[pidx] != None:
         a = prevs[pidx] + 1
     else:
         a = -1
