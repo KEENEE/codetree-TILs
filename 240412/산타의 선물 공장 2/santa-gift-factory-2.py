@@ -124,7 +124,10 @@ def change(info):
     else:   # src 벨트에 선물이 없는경우
         if len_belts[dst] != 0:
             dst_first = belts_starts[dst]
-            belts_starts[dst] = nexts[dst_first]    # 만약 next가 None이었으면 그대로 start도 None이 됨
+            dst_first_next = nexts[dst_first]
+            nexts[dst_first] = None
+            prevs[dst_first_next] = -1
+            belts_starts[dst] = dst_first_next    # 만약 next가 None이었으면 그대로 start도 None이 됨
             if len_belts[dst] == 1:
                 belts_ends[dst] = None
             belts_starts[src] = dst_first
